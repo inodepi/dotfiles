@@ -1,4 +1,6 @@
-/* HyprKenso-inspired wlogout theme, adapted to Catppuccin Mocha. */
+/* wlogout theme — Catppuccin Mocha, matched to the Hyprland/waybar desktop.
+   Compact cards, frosted backdrop (blur comes from Hyprland layerrule
+   `logout_dialog`), blue focus accent, 16px radius like hyprland windows. */
 
 @define-color base      #1e1e2e;
 @define-color mantle    #181825;
@@ -8,6 +10,8 @@
 @define-color surface2  #585b70;
 @define-color overlay0  #6c7086;
 @define-color text      #cdd6f4;
+@define-color subtext   #a6adc8;
+@define-color blue      #89b4fa;
 @define-color mauve     #cba6f7;
 
 * {
@@ -16,55 +20,71 @@
 }
 
 window {
-    background-color: rgba(17, 17, 27, 0.45);
+    background-color: alpha(@crust, 0.35);
 }
 
 button {
-    border-radius: 50px;
-    min-width: 341px;
-    margin: 20px 29px;
-    padding: 100px 10px;
+    border-radius: 16px;
+    min-width: 190px;
+    min-height: 140px;
+    margin: 12px 14px;
+    padding: 22px 12px 16px;
     color: @text;
-    font-size: 0;
-    border: 3px solid alpha(@mauve, 0.35);
-    background-color: alpha(@surface0, 0.25);
+    font-size: 13px;
+    border: 2px solid alpha(@blue, 0.30);
+    background-color: alpha(@surface0, 0.32);
     outline-style: none;
     background-repeat: no-repeat;
-    background-position: center;
-    background-size: 30%;
-    box-shadow: 0 4px 18px alpha(@crust, 0.35);
-    transition: all 0.3s cubic-bezier(.55, 0.0, .28, 1.682), box-shadow 0.2s ease-in-out, background-color 0.2s ease-in-out;
+    background-position: center 36%;
+    background-size: 32%;
+    box-shadow: 0 8px 24px alpha(@crust, 0.35);
+    transition: all 0.18s ease-out;
 }
 
 button:hover,
 button:focus {
-    background-color: alpha(@mauve, 0.85);
-    border-color: alpha(@mauve, 0.85);
-    background-size: 40%;
-    box-shadow: 0 0 30px alpha(@mauve, 0.25);
-    transition: all 0.3s cubic-bezier(.55, 0.0, .28, 1.682);
+    background-color: alpha(@blue, 0.88);
+    border-color: @blue;
+    color: @base;
+    background-size: 38%;
+    box-shadow: 0 0 0 1px alpha(@blue, 0.45), 0 10px 32px alpha(@blue, 0.30);
 }
 
 #lock {
-    background-image: url("/home/kristiandyan/.config/wlogout/icons/lock.png");
+    background-image: url("/home/kristiandyan/.config/wlogout/icons/lock.svg");
 }
 
 #logout {
-    background-image: url("/home/kristiandyan/.config/wlogout/icons/logout.png");
+    background-image: url("/home/kristiandyan/.config/wlogout/icons/logout.svg");
 }
 
 #suspend {
-    background-image: url("/home/kristiandyan/.config/wlogout/icons/sleep.png");
+    background-image: url("/home/kristiandyan/.config/wlogout/icons/suspend.svg");
 }
 
 #shutdown {
-    background-image: url("/home/kristiandyan/.config/wlogout/icons/power.png");
+    background-image: url("/home/kristiandyan/.config/wlogout/icons/shutdown.svg");
 }
 
 #reboot {
-    background-image: url("/home/kristiandyan/.config/wlogout/icons/restart.png");
+    background-image: url("/home/kristiandyan/.config/wlogout/icons/reboot.svg");
 }
 
 #hibernate {
-    background-image: url("/home/kristiandyan/.config/wlogout/icons/hibernate.png");
+    background-image: url("/home/kristiandyan/.config/wlogout/icons/hibernate.svg");
+}
+
+/* Rates box is informational: no blue hover, keep text readable. */
+#rates {
+    background-size: 26%;
+    background-position: center 30%;
+    font-size: 13px;
+    color: @text;
+}
+
+#rates:hover,
+#rates:focus {
+    background-color: alpha(@surface1, 0.85);
+    border-color: alpha(@subtext, 0.60);
+    color: @text;
 }
