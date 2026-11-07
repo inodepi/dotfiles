@@ -1,18 +1,15 @@
-/* wlogout theme — Catppuccin Mocha, matched to the Hyprland/waybar desktop.
-   Compact cards, frosted backdrop (blur comes from Hyprland layerrule
-   `logout_dialog`), blue focus accent, 16px radius like hyprland windows. */
+/* wlogout theme — Tokyo Night, matched to waybar/wofi.
+   Compact cards, frosted backdrop (Hyprland layerrule `logout_dialog`). */
 
-@define-color base      #1e1e2e;
-@define-color mantle    #181825;
-@define-color crust     #11111b;
-@define-color surface0  #313244;
-@define-color surface1  #45475a;
-@define-color surface2  #585b70;
-@define-color overlay0  #6c7086;
-@define-color text      #cdd6f4;
-@define-color subtext   #a6adc8;
-@define-color blue      #89b4fa;
-@define-color mauve     #cba6f7;
+@define-color base      #1a1b26;
+@define-color mantle    #16161e;
+@define-color surface   #24283b;
+@define-color surface2  #3b4261;
+@define-color text      #c0caf5;
+@define-color subtext   #a9b1d6;
+@define-color muted     #565f89;
+@define-color blue      #7aa2f7;
+@define-color red       #f7768e;
 
 * {
     font-family: "JetBrainsMono Nerd Font", monospace;
@@ -20,7 +17,7 @@
 }
 
 window {
-    background-color: alpha(@crust, 0.35);
+    background-color: alpha(@base, 0.35);
 }
 
 button {
@@ -31,23 +28,23 @@ button {
     padding: 22px 12px 16px;
     color: @text;
     font-size: 13px;
-    border: 2px solid alpha(@blue, 0.30);
-    background-color: alpha(@surface0, 0.32);
+    border: 1px solid alpha(@surface2, 0.60);
+    background-color: alpha(@surface, 0.40);
     outline-style: none;
     background-repeat: no-repeat;
     background-position: center 36%;
     background-size: 32%;
-    box-shadow: 0 8px 24px alpha(@crust, 0.35);
+    box-shadow: 0 8px 24px alpha(@mantle, 0.45);
     transition: all 0.18s ease-out;
 }
 
 button:hover,
 button:focus {
-    background-color: alpha(@blue, 0.88);
+    background-color: alpha(@blue, 0.90);
     border-color: @blue;
-    color: @base;
+    color: @mantle;
     background-size: 38%;
-    box-shadow: 0 0 0 1px alpha(@blue, 0.45), 0 10px 32px alpha(@blue, 0.30);
+    box-shadow: 0 0 0 1px alpha(@blue, 0.40), 0 10px 32px alpha(@blue, 0.30);
 }
 
 #lock {
@@ -84,7 +81,7 @@ button:focus {
 
 #rates:hover,
 #rates:focus {
-    background-color: alpha(@surface1, 0.85);
-    border-color: alpha(@subtext, 0.60);
+    background-color: alpha(@surface2, 0.85);
+    border-color: alpha(@muted, 0.70);
     color: @text;
 }

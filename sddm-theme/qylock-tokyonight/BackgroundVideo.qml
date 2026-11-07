@@ -1,10 +1,8 @@
 import QtQuick
 import QtQuick.Window
 
-// Static wallpaper replacement for the Qylock video background.
-// Keeps the same Loader API as the original theme so Main.qml is untouched.
+// Static wallpaper background (Qylock's video loader, no QtMultimedia needed).
 Item {
-    id: root
     readonly property real s: Screen.height / 768
     anchors.fill: parent
 

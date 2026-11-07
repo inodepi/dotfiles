@@ -1,0 +1,8 @@
+[SddmGreeterTheme]
+Name=qylock-tokyonight
+Description=Qylock pixel-coffee layout, Tokyo Night palette, JetBrains Mono, wallpaper background
+Author=kristiandyan
+Type=sddm-theme
+MainScript=Main.qml
+ConfigFile=theme.conf
+QtVersion=6

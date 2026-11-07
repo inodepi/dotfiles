@@ -80,7 +80,7 @@ Modular config — `hyprland.conf` sources `conf/{monitors,theme,keybinds,autost
 | Idle | Action |
 | :--- | :--- |
 | 2 min | Brightness → 0% (black screen, no DPMS delay) |
-| 10 min | Session locks (same Catppuccin hyprlock as `Super+L`) |
+| 10 min | Session locks (same Tokyo Night hyprlock as `Super+L`) |
 | 15 min | Display off (DPMS) |
 | 25 min | Suspend — **on battery only** |
 | 60 min | Suspend regardless of power source |
@@ -91,7 +91,7 @@ Every wake path restores brightness and lands directly on the hyprlock password
 prompt. Media/video inhibitors (dbus) are respected. Caffeine mode (see the
 `waybar` package below) pauses this entire schedule while active.
 
-**Lock screen (`hyprlock`)** — Catppuccin Mocha palette with live clock (1s),
+**Lock screen (`hyprlock`)** — Tokyo Night palette with live clock (1s),
 weekday + date label, and a battery/charging label (10s refresh).
 
 **Cursor theme** — Bibata Modern Ice everywhere: `XCURSOR_THEME`/`XCURSOR_SIZE`
@@ -132,8 +132,7 @@ or by clicking the bar icon:
 `Super+M` opens the power menu through `wlogout-rates`. It keeps the five power
 actions and adds a single rates box that shows every configured currency on its
 own line. The layout and white icons are adapted from
-[HyprKenso](https://github.com/aadritobasu/HyprKenso), recolored to Catppuccin
-Mocha. The six buttons are arranged as a 3x2 square grid on 1920x1080:
+[HyprKenso](https://github.com/aadritobasu/HyprKenso), recolored to Tokyo Night. The six buttons are arranged as a 3x2 square grid on 1920x1080:
 
 - Fiat rates come from `open.er-api.com` (USD base, cross-computed to PHP).
 - Crypto rates come from CoinGecko.
@@ -159,13 +158,13 @@ Append another ISO code under `fiat`, or add `"SYMBOL": "coingecko-id"` under
 automatically. Run `wlogout-rates --print --refresh` to preview the generated
 layout, or `wlogout-rates --refresh` to bypass the cache.
 
-### SDDM login theme (Qylock, wallpaper build)
+### SDDM login theme (Qylock, Tokyo Night)
 
-`sddm-theme/pixel-coffee-wallpaper/` is a copy of the
-[Qylock](https://github.com/Darkkal44/qylock) `pixel-coffee` greeter with the
-video background swapped for the current Hyprland wallpaper. The QML, pixel
-font, clock, and layout are unchanged, so it looks the same apart from the
-background (and it no longer needs QtMultimedia at login).
+`sddm-theme/qylock-tokyonight/` is a copy of the
+[Qylock](https://github.com/Darkkal44/qylock) `pixel-coffee` greeter layout,
+restyled to Tokyo Night: `#1a1b26` base, `#7aa2f7` accent, JetBrainsMono Nerd
+Font instead of PixelifySans, rounded password field and buttons. The background
+is the current Hyprland wallpaper (static image, so no video decode at login).
 
 Install it system-wide (SDDM reads themes from `/usr/share` as the `sddm` user):
 
@@ -178,12 +177,13 @@ The script copies the theme, fixes permissions, and points
 appears on the next logout. Preview without logging out:
 
 ```sh
-cd sddm-theme/pixel-coffee-wallpaper
+cd sddm-theme/qylock-tokyonight
 sddm-greeter-qt6 --test-mode --theme .
 ```
 
-To change the background, replace `sddm-theme/pixel-coffee-wallpaper/background.jpg`
-and re-run the installer. See `sddm-theme/NOTICE.md` for attribution; the
+To change the background, replace `sddm-theme/qylock-tokyonight/background.jpg`
+and re-run the installer. Pass a theme name as the first argument to install a
+different theme directory. See `sddm-theme/NOTICE.md` for attribution; the
 upstream QML is GPL-3.0.
 
 ### Fastfetch theming

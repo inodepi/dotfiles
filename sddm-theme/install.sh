@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-# Install the custom Qylock-based SDDM theme system-wide.
-# Usage: sudo ./sddm-theme/install.sh
+# Install a custom Qylock-based SDDM theme system-wide.
+# Usage: sudo ./sddm-theme/install.sh [theme-name]
 set -euo pipefail
 
-NAME=pixel-coffee-wallpaper
+NAME=${1:-qylock-tokyonight}
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SRC="$HERE/$NAME"
 
 [[ -d $SRC ]] || { echo "missing theme dir: $SRC" >&2; exit 1; }
 
-# DEST/CONF are overridable for testing without root.
+# DEST/CONF overridable for testing without root.
 if [[ -z ${DEST:-} ]]; then
-    [[ ${EUID} -eq 0 ]] || { echo "run with sudo: sudo $0" >&2; exit 1; }
+    [[ ${EUID} -eq 0 ]] || { echo "run with sudo: sudo $0 $NAME" >&2; exit 1; }
     DEST=/usr/share/sddm/themes/$NAME
     CONF=/etc/sddm.conf.d/theme.conf
 fi

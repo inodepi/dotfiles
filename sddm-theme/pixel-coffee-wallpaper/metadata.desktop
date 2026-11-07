@@ -1,8 +1,0 @@
-[SddmGreeterTheme]
-Name=pixel-coffee-wallpaper
-Description=pixel-coffee Qylock Theme with a static wallpaper background
-Author=kristiandyan
-Type=sddm-theme
-MainScript=Main.qml
-ConfigFile=theme.conf
-QtVersion=6
