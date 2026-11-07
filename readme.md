@@ -33,7 +33,8 @@ Configurations are isolated into individual modular packages under the `stow/` d
 | **`hypr`** | Hyprland dynamic tiling window manager setup (incl. hypridle, hyprlock, cursor env) |
 | **`waybar`** | Custom Waybar status bar layout with caffeine mode (󰾪/󰅶 idle inhibitor) |
 | **`systemd`** | `caffeine.service` user unit — auto-installed with the `waybar` package |
-| **`wofi`** | Wofi application launcher configuration (also powers the Super+M power menu) |
+| **`wofi`** | Wofi application launcher configuration |
+| **`wlogout`** | Wlogout power menu — lock, logout, suspend, reboot, shutdown, plus a live USD/GBP/SOL→PHP rates box |
 | **`gtk`** | Bibata Modern Ice cursor theme for GTK3/GTK4 apps |
 | **`kitty`** | Kitty terminal configuration |
 
@@ -126,22 +127,37 @@ or by clicking the bar icon:
 - Handy commands: `make -C ~/.config/waybar toggle` (also `on` / `off` /
   `status` / `install`).
 
-### Power menu (Super+M)
+### Wlogout power menu and currency rates (the `wlogout` package)
 
-`Super+M` opens a wofi dmenu list with Lock, Logout, Suspend, Reboot, and
-Shutdown actions. It reuses the wofi theme from the `wofi` package, so there is
-no separate power-menu package or config directory to stow.
+`Super+M` opens the power menu through `wlogout-rates`. It keeps the five power
+actions and adds a single rates box that shows every configured currency on its
+own line. The layout and white icons are adapted from
+[HyprKenso](https://github.com/aadritobasu/HyprKenso), recolored to Catppuccin
+Mocha. The six buttons are arranged as a 3x2 square grid on 1920x1080:
 
-| Action | Command |
-| :--- | :--- |
-| Lock | `hyprlock` |
-| Logout | `hyprctl dispatch exit` |
-| Suspend | `systemctl suspend` |
-| Reboot | `systemctl reboot` |
-| Shutdown | `systemctl poweroff` |
+- Fiat rates come from `open.er-api.com` (USD base, cross-computed to PHP).
+- Crypto rates come from CoinGecko.
+- Results are cached for 5 minutes in `~/.cache/wlogout-rates/rates.json`;
+  if a refresh fails, the last known rates are shown.
+- The rates box uses the same icon/button treatment as the power actions and
+  pulses every 10 seconds. Its icon is a custom peso coin, since every rate
+  converts to PHP. Rates refresh when the menu opens; wlogout
+  labels are static while it stays open.
 
-The script lives in the `hypr` package at `~/.local/bin/power-menu`.
-`power-menu --print` lists the entries without opening the menu.
+Add currencies in `~/.config/wlogout/currencies.json`:
+
+```json
+{
+    "buttons_per_row": 3,
+    "fiat": ["USD", "GBP"],
+    "crypto": {"SOL": "solana"}
+}
+```
+
+Append another ISO code under `fiat`, or add `"SYMBOL": "coingecko-id"` under
+`crypto`. The wrapper combines them into the same box and generates the CSS
+automatically. Run `wlogout-rates --print --refresh` to preview the generated
+layout, or `wlogout-rates --refresh` to bypass the cache.
 
 ### Fastfetch theming
 
