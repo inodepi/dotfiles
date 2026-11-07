@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Install a custom Qylock-based SDDM theme system-wide.
+# Install the potaterrr SDDM theme system-wide.
 # Usage: sudo ./sddm-theme/install.sh [theme-name]
 set -euo pipefail
 
-NAME=${1:-qylock-tokyonight}
+NAME=${1:-potaterrr}
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SRC="$HERE/$NAME"
 

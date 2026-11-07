@@ -11,7 +11,7 @@
 #   * if update-grub fails, grub.cfg is restored automatically
 set -euo pipefail
 
-NAME=qylock-tokyonight
+NAME=potaterrr
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SRC="$HERE/$NAME"
 DEST=${DEST:-/boot/grub/themes/$NAME}
@@ -108,7 +108,7 @@ if ! regen_grub; then
     die "update-grub failed; grub.cfg restored from backup"
 fi
 grub-script-check "$CFG" || die "generated grub.cfg has syntax errors - restore $DEFAULTS.bak.$STAMP"
-grep -q "set theme=$DEST/theme.txt" "$CFG" \
+grep -q "theme=.*$DEST/theme.txt" "$CFG" \
     || die "theme line missing from grub.cfg - restore $DEFAULTS.bak.$STAMP"
 
 echo

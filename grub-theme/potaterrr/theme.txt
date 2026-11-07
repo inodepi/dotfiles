@@ -1,4 +1,4 @@
-# Qylock Tokyo Night GRUB theme
+# Potaterrr Tokyo Night GRUB theme
 # Palette matches waybar/wofi/hyprlock/wlogout: base #1a1b26, accent #7aa2f7.
 
 title-text: ""

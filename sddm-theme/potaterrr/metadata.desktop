@@ -1,6 +1,6 @@
 [SddmGreeterTheme]
-Name=qylock-tokyonight
-Description=Qylock pixel-coffee layout, Tokyo Night palette, JetBrains Mono, wallpaper background
+Name=potaterrr
+Description=Potaterrr Tokyo Night SDDM theme, JetBrains Mono, static wallpaper
 Author=kristiandyan
 Type=sddm-theme
 MainScript=Main.qml

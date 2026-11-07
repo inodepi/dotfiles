@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Window
 
-// Static wallpaper background (Qylock's video loader, no QtMultimedia needed).
+// Static wallpaper background (no QtMultimedia needed).
 Item {
     readonly property real s: Screen.height / 768
     anchors.fill: parent
