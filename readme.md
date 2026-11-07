@@ -159,6 +159,33 @@ Append another ISO code under `fiat`, or add `"SYMBOL": "coingecko-id"` under
 automatically. Run `wlogout-rates --print --refresh` to preview the generated
 layout, or `wlogout-rates --refresh` to bypass the cache.
 
+### SDDM login theme (Qylock, wallpaper build)
+
+`sddm-theme/pixel-coffee-wallpaper/` is a copy of the
+[Qylock](https://github.com/Darkkal44/qylock) `pixel-coffee` greeter with the
+video background swapped for the current Hyprland wallpaper. The QML, pixel
+font, clock, and layout are unchanged, so it looks the same apart from the
+background (and it no longer needs QtMultimedia at login).
+
+Install it system-wide (SDDM reads themes from `/usr/share` as the `sddm` user):
+
+```sh
+sudo ./sddm-theme/install.sh
+```
+
+The script copies the theme, fixes permissions, and points
+`/etc/sddm.conf.d/theme.conf` at it. It does not restart SDDM, so the theme
+appears on the next logout. Preview without logging out:
+
+```sh
+cd sddm-theme/pixel-coffee-wallpaper
+sddm-greeter-qt6 --test-mode --theme .
+```
+
+To change the background, replace `sddm-theme/pixel-coffee-wallpaper/background.jpg`
+and re-run the installer. See `sddm-theme/NOTICE.md` for attribution; the
+upstream QML is GPL-3.0.
+
 ### Fastfetch theming
 
 The default `config.jsonc` is the [Catppuccin fastfetch](https://github.com/Nukecraft5419/fastfetch)
