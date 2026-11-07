@@ -127,38 +127,20 @@ window#waybar {
     padding: 0 10px;
     margin: 5px 3px;
     border-radius: 12px;
-    /* Same background whether on or off — only the icon color changes.
-       Matches the other pill modules (Tokyo Night base). */
+    background-color: @base;
+    border: 1px solid rgba(157, 124, 216, 0.2);
+}
+
+/* Active: white coffee icon on the normal dark pill */
+#custom-caffeine.active {
+    color: #ffffff;
     background-color: @base;
 }
 
-/* Active: steaming coffee — teal icon + subtle steam-glow breathing */
-#custom-caffeine.active {
-    color: @yellow;
-    animation-name: caffeine-steam;
-    animation-duration: 3s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-}
-
-@keyframes caffeine-steam {
-    0% {
-        color: @cyan;
-        box-shadow: none;
-    }
-    50% {
-        color: @purple;
-        box-shadow: 0 0 8px rgba(157, 124, 216, 0.35);
-    }
-    100% {
-        color: @cyan;
-        box-shadow: none;
-    }
-}
-
-/* Inactive: sleeping zzz — dimmed */
+/* Inactive: dimmed icon on the normal dark pill */
 #custom-caffeine.inactive {
     color: #565f89;
+    background-color: @base;
 }
 
 /* --- Animation Keyframes --- */

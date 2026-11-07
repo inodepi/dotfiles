@@ -83,6 +83,7 @@
             "2": "󰆍", // terminal
             "3": "󰉋", // files
             "4": "󰇚", // Motrix / downloads
+            "5": "󰙯", // Discord
             "default": "󰄯"
         },
         "sort-by": "number",
@@ -91,7 +92,8 @@
                 1,
                 2,
                 3,
-                4
+                4,
+                5
             ]
         }
     },

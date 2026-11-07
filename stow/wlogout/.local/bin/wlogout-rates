@@ -62,7 +62,7 @@ cache_is_fresh() {
 fetch_rates() {
     local fiat_json crypto_json crypto_ids fiat_rates crypto_rates
 
-    if ! fiat_json=$(curl -fsSL --max-time 10 "https://open.er-api.com/v6/latest/USD"); then
+    if ! fiat_json=$(curl -fsSL --connect-timeout 3 --max-time 10 "https://open.er-api.com/v6/latest/USD"); then
         return 1
     fi
     if ! jq -e '.result == "success" and (.rates.PHP | type == "number")' \
@@ -82,7 +82,7 @@ fetch_rates() {
 
     crypto_ids=$(jq -r '.crypto // {} | to_entries | map(.value) | join(",")' "$CONFIG")
     if [[ -n "$crypto_ids" ]]; then
-        if ! crypto_json=$(curl -fsSL --max-time 10 \
+        if ! crypto_json=$(curl -fsSL --connect-timeout 3 --max-time 10 \
             "https://api.coingecko.com/api/v3/simple/price?ids=${crypto_ids}&vs_currencies=php"); then
             return 1
         fi

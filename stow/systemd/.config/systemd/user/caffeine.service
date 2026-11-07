@@ -4,7 +4,7 @@ Description=Caffeine mode (idle inhibitor for hypridle)
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/systemd-inhibit --what=idle:sleep --who=Caffeine --why="Keep screen awake" --mode=block sleep infinity
+ExecStart=/usr/bin/systemd-inhibit --what=idle --who=Caffeine --why="Keep screen awake" --mode=block sleep infinity
 # If caffeine is left on, release the lock cleanly when the session ends.
 TimeoutStopSec=2
 KillMode=control-group
