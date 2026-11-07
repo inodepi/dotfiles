@@ -1,0 +1,13 @@
+[Unit]
+StartLimitIntervalSec=0
+Description=scrcpy phone microphone over Wi-Fi
+After=pipewire-pulse.service wireplumber.service network-online.target
+
+[Service]
+Type=simple
+ExecStart=%h/Applications/scrcpy-mic/run-scrcpy-mic.sh
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

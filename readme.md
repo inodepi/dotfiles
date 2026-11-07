@@ -38,6 +38,7 @@ Configurations are isolated into individual modular packages under the `stow/` d
 | **`themes`** | Tokyo Night SDDM login theme + GRUB boot theme (system paths, not stowed) |
 | **`gtk`** | Bibata Modern Ice cursor theme for GTK3/GTK4 apps |
 | **`kitty`** | Kitty terminal configuration |
+| **`mic`** | Phone microphone over Wi-Fi via scrcpy (`Scrcpy_Mic` virtual input; `mic`, `mic-usb`, `mic-off`) |
 
 The installer also has an **`apps`** group for the desktop application set:
 Brave, Nemo (default GUI file manager), Motrix, opencode, kitty, and yazi.
@@ -45,6 +46,18 @@ Brave and Motrix are installed from their official repositories/releases; Nemo
 and the XDG desktop portals are installed from distro packages; opencode uses
 its official installer. Selecting `apps` also sets Nemo as the default
 `inode/directory` handler.
+
+### Phone microphone over Wi-Fi (the `mic` package)
+
+Installs `scrcpy` + `adb`, a `Scrcpy_Mic` PipeWire virtual input, and a
+`scrcpy-mic.service` user service. Pair the phone once over USB
+(`adb tcpip 5555`), then use:
+
+```bash
+mic        # reconnect and set Scrcpy_Mic as the default input
+mic-usb    # one-time USB reconnect after a phone reboot
+mic-off    # switch back to the laptop mic
+```
 
 ---
 

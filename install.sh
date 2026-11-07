@@ -13,7 +13,7 @@ DOTFILES_BASE="$(cd "$DOTFILES_BASE" 2>/dev/null && pwd -P || printf %s "$DOTFIL
 TARGET_DIR="$(cd "$STOW_TARGET" 2>/dev/null && pwd -P || printf %s "$STOW_TARGET")"
 DOTFILES_DIR="$DOTFILES_BASE/stow"
 
-ALL_PACKAGES=(bash fastfetch nvim starship hypr waybar wofi wlogout themes gtk kitty apps)
+ALL_PACKAGES=(bash fastfetch nvim starship hypr waybar wofi wlogout themes gtk kitty mic apps)
 # Default for non-interactive runs (override with: PACKAGES="bash nvim" ./install.sh -y)
 DEFAULT_PACKAGES=(bash nvim starship fastfetch)
 
@@ -132,6 +132,7 @@ esac
 pkg_name() {
     case "$PKG_MGR:$1" in
         *:hypr)    echo "hyprland" ;;
+        dnf:adb|pacman:adb|zypper:adb|apk:adb|xbps:adb) echo "android-tools" ;;
         apt:mako)  echo "mako-notifier" ;;
         apt:python3-gobject) echo "python3-gi" ;;
         pacman:python3-gobject) echo "python-gobject" ;;
@@ -452,6 +453,7 @@ if [ ${#SELECTED_PACKAGES[@]} -eq 0 ]; then
             "themes" "Tokyo Night SDDM login + GRUB boot themes" OFF \
             "gtk" "GTK cursor theme (Bibata Modern Ice)" OFF \
             "kitty" "Kitty terminal configuration" OFF \
+            "mic" "Phone mic over Wi-Fi (scrcpy)" OFF \
             "apps" "Brave, Nemo, Motrix, opencode, kitty, yazi" OFF \
             3>&1 1>&2 2>&3) || { echo "Installation cancelled by user."; exit 0; }
         # shellcheck disable=SC2206
@@ -543,6 +545,7 @@ if [ -n "$PKG_INSTALL" ]; then
                            rm -rf /tmp/bibata-dl
                        fi ;;
             kitty)     install_pkgs kitty ;;
+            mic)       install_pkgs scrcpy adb ;;
             apps)      install_pkgs kitty yazi jq xdg-utils
                        install_nemo
                        install_brave
@@ -594,6 +597,19 @@ for pkg in "${SELECTED_PACKAGES[@]}"; do
         stow -d "$DOTFILES_DIR" -t "$TARGET_DIR" -R "$pkg" || warn "stow had issues with $pkg (see output above)"
     else
         warn "Package '$pkg' not found in stow/, skipping."
+    fi
+done
+
+# ---------------------------------------------------------------------------
+# 6b. Phone mic (scrcpy) — enable the user service after stowing
+# ---------------------------------------------------------------------------
+for p in "${SELECTED_PACKAGES[@]}"; do
+    if [ "$p" = "mic" ]; then
+        log "Enabling phone mic service (scrcpy)..."
+        systemctl --user daemon-reload 2>/dev/null || true
+        systemctl --user enable --now scrcpy-mic.service 2>/dev/null \
+            || warn "Could not start scrcpy-mic.service; run 'mic' after pairing the phone."
+        echo "    Phone mic: run 'mic' (or 'mic-usb' once after a phone reboot)."
     fi
 done
 
