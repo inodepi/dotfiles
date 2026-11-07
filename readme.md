@@ -158,6 +158,31 @@ Append another ISO code under `fiat`, or add `"SYMBOL": "coingecko-id"` under
 automatically. Run `wlogout-rates --print --refresh` to preview the generated
 layout, or `wlogout-rates --refresh` to bypass the cache.
 
+### GRUB boot theme (Qylock, Tokyo Night)
+
+`grub-theme/qylock-tokyonight/` is a GRUB 2 gfxmenu theme using the same Tokyo
+Night palette as the rest of the desktop: `#1a1b26` base, `#7aa2f7` selection,
+JetBrainsMono NF fonts generated with `grub-mkfont`, and the Hyprland wallpaper
+darkened 55% as the menu background (1920x1080, matching `GRUB_GFXMODE`).
+
+```sh
+sudo ./grub-theme/install.sh
+sudo ./grub-theme/install.sh --revert   # rollback
+```
+
+The installer is deliberately narrow:
+
+- backs up `/etc/default/grub` and `/boot/grub/grub.cfg` first
+- edits only `GRUB_THEME` and `GRUB_BACKGROUND`
+- never runs `grub-install` (no EFI/bootloader writes)
+- restores `grub.cfg` automatically if `update-grub` fails
+- validates the result with `grub-script-check`
+
+A theme that fails to load makes GRUB fall back to its text menu; it does not
+prevent booting. The previous `Elegant-forest-window-left-dark` theme stays
+installed under `/usr/share/grub/themes`, so reverting is just the backup
+restore above.
+
 ### SDDM login theme (Qylock, Tokyo Night)
 
 `sddm-theme/qylock-tokyonight/` is a copy of the
