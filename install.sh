@@ -13,7 +13,7 @@ DOTFILES_BASE="$(cd "$DOTFILES_BASE" 2>/dev/null && pwd -P || printf %s "$DOTFIL
 TARGET_DIR="$(cd "$STOW_TARGET" 2>/dev/null && pwd -P || printf %s "$STOW_TARGET")"
 DOTFILES_DIR="$DOTFILES_BASE/stow"
 
-ALL_PACKAGES=(bash fastfetch nvim starship hypr waybar wofi wlogout gtk kitty apps)
+ALL_PACKAGES=(bash fastfetch nvim starship hypr waybar wofi wlogout themes gtk kitty apps)
 # Default for non-interactive runs (override with: PACKAGES="bash nvim" ./install.sh -y)
 DEFAULT_PACKAGES=(bash nvim starship fastfetch)
 
@@ -45,6 +45,7 @@ EOF
 ASSUME_YES=0
 INSTALL_ALL=0
 DO_PULL=1
+NO_GRUB=0
 PACKAGE_ARG=""
 
 while [ $# -gt 0 ]; do
@@ -53,6 +54,7 @@ while [ $# -gt 0 ]; do
         -a|--all)      ASSUME_YES=1; INSTALL_ALL=1 ;;
         -p|--packages) PACKAGE_ARG="${2:-}"; shift ;;
         --no-pull)     DO_PULL=0 ;;
+        --no-grub)     NO_GRUB=1 ;;
         -h|--help)     usage; exit 0 ;;
         *) echo "Unknown option: $1"; usage; exit 1 ;;
     esac
@@ -437,7 +439,7 @@ install_hyprshot() {
 if [ ${#SELECTED_PACKAGES[@]} -eq 0 ]; then
     if command -v whiptail >/dev/null 2>&1; then
         CHOICES=$(whiptail --title "Potaterrr Dotfiles Installer" \
-            --checklist "Use [Space] to select/deselect packages to install & stow:" 22 78 12 \
+            --checklist "Use [Space] to select/deselect packages to install & stow:" 22 78 14 \
             "bash" "Bash shell configurations & aliases" ON \
             "nvim" "Neovim (LazyVim setup)" ON \
             "starship" "Starship prompt preset" ON \
@@ -446,6 +448,7 @@ if [ ${#SELECTED_PACKAGES[@]} -eq 0 ]; then
             "waybar" "Waybar status bar" OFF \
             "wofi" "Wofi application launcher" OFF \
             "wlogout" "Wlogout power menu (lock / logout / reboot)" OFF \
+            "themes" "Tokyo Night SDDM login + GRUB boot themes" OFF \
             "gtk" "GTK cursor theme (Bibata Modern Ice)" OFF \
             "kitty" "Kitty terminal configuration" OFF \
             "apps" "Brave, Nemo, Motrix, opencode, kitty, yazi" OFF \
@@ -523,6 +526,7 @@ if [ -n "$PKG_INSTALL" ]; then
             waybar)    install_pkgs waybar mako wofi jq libnotify ;;
             wofi)      install_pkgs wofi ;;
             wlogout)   install_pkgs wlogout ;;
+            themes)    install_pkgs python3 grub2-common ;;
             gtk)       install_pkgs bibata-cursor-theme
                        # Fallback: fetch Bibata Modern Ice from GitHub releases
                        # when this distro doesn't package it (user-level install)
@@ -582,7 +586,7 @@ backup_conflicts() {
 
 log "Applying configurations via GNU Stow (target: $TARGET_DIR)..."
 for pkg in "${SELECTED_PACKAGES[@]}"; do
-    [ "$pkg" = "apps" ] && continue
+    case "$pkg" in apps|themes) continue ;; esac
     if [ -d "$DOTFILES_DIR/$pkg" ]; then
         backup_conflicts "$pkg"
         log "Stowing $pkg..."
@@ -608,6 +612,34 @@ for p in "${SELECTED_PACKAGES[@]}"; do
         systemctl --user daemon-reload 2>/dev/null \
             || warn "Could not reload systemd user units; run 'systemctl --user daemon-reload' later."
         echo "    Caffeine mode: toggle with Super+C or click the 󰾪/󰅶 icon on waybar."
+    fi
+done
+
+# ---------------------------------------------------------------------------
+# 8. Desktop themes — SDDM greeter + GRUB boot menu (Tokyo Night)
+#    Theme files are copied to system paths and the active config is
+#    switched. GRUB runs update-grub with backups; pass --no-grub to skip
+#    the bootloader step (the theme scripts keep their own rollback).
+# ---------------------------------------------------------------------------
+for p in "${SELECTED_PACKAGES[@]}"; do
+    [ "$p" = "themes" ] || continue
+
+    if command -v sddm >/dev/null 2>&1; then
+        log "Installing SDDM login theme (qylock-tokyonight)..."
+        $SUDO "$DOTFILES_BASE/sddm-theme/install.sh" qylock-tokyonight \
+            || warn "SDDM theme failed; retry: sudo $DOTFILES_BASE/sddm-theme/install.sh"
+    else
+        warn "sddm not installed; skipping the login theme."
+    fi
+
+    if [ "$NO_GRUB" -eq 1 ]; then
+        warn "GRUB theme skipped (--no-grub). Apply later: sudo $DOTFILES_BASE/grub-theme/install.sh"
+    elif [ -f /etc/default/grub ] && [ -d /boot/grub ]; then
+        log "Installing GRUB boot theme (runs update-grub with backups)..."
+        $SUDO "$DOTFILES_BASE/grub-theme/install.sh" \
+            || warn "GRUB theme failed; retry: sudo $DOTFILES_BASE/grub-theme/install.sh"
+    else
+        warn "GRUB config not found; skipping the boot theme."
     fi
 done
 

@@ -35,6 +35,7 @@ Configurations are isolated into individual modular packages under the `stow/` d
 | **`systemd`** | `caffeine.service` user unit — auto-installed with the `waybar` package |
 | **`wofi`** | Wofi application launcher configuration |
 | **`wlogout`** | Wlogout power menu — lock, logout, suspend, reboot, shutdown, plus a live USD/GBP/SOL→PHP rates box |
+| **`themes`** | Tokyo Night SDDM login theme + GRUB boot theme (system paths, not stowed) |
 | **`gtk`** | Bibata Modern Ice cursor theme for GTK3/GTK4 apps |
 | **`kitty`** | Kitty terminal configuration |
 
@@ -170,6 +171,11 @@ sudo ./grub-theme/install.sh
 sudo ./grub-theme/install.sh --revert   # rollback
 ```
 
+Selecting the `themes` package in `./install.sh` copies the theme and runs
+`update-grub` automatically (including in `-y` / `-a` runs). Pass `--no-grub`
+to the installer to copy the theme files without touching the bootloader
+configuration.
+
 The installer is deliberately narrow:
 
 - backs up `/etc/default/grub` and `/boot/grub/grub.cfg` first
@@ -196,6 +202,9 @@ Install it system-wide (SDDM reads themes from `/usr/share` as the `sddm` user):
 ```sh
 sudo ./sddm-theme/install.sh
 ```
+
+Or select the `themes` package in `./install.sh`, which runs this installer for
+you when `sddm` is present.
 
 The script copies the theme, fixes permissions, and points
 `/etc/sddm.conf.d/theme.conf` at it. It does not restart SDDM, so the theme

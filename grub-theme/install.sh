@@ -26,7 +26,7 @@ if [[ ${1:-} == --revert ]]; then
     [[ ${EUID} -eq 0 ]] || die "run with sudo: sudo $0 --revert"
     [[ -f $DEFAULTS.bak ]] || die "no backup at $DEFAULTS.bak"
     cp -a "$DEFAULTS.bak" "$DEFAULTS"
-    "${UPDATE_GRUB:-/usr/sbin/update-grub}" || die "update-grub failed after revert"
+    regen_grub || die "grub regeneration failed after revert"
     echo "reverted $DEFAULTS from backup and regenerated grub.cfg"
     exit 0
 fi
@@ -35,16 +35,34 @@ if [[ -z ${SKIP_ROOT_CHECK:-} && ${EUID} -ne 0 ]]; then
     die "run with sudo: sudo $0"
 fi
 UPDATE_GRUB=$(command -v update-grub || { [[ -x /usr/sbin/update-grub ]] && echo /usr/sbin/update-grub; } || true)
-if [[ -z ${SKIP_UPDATE:-} && -z ${UPDATE_GRUB:-} ]]; then
-    die "update-grub not found"
+if [[ -z ${SKIP_UPDATE:-} && -z ${UPDATE_GRUB:-} ]] && ! command -v grub-mkconfig >/dev/null; then
+    die "neither update-grub nor grub-mkconfig found"
 fi
 
+regen_grub() {
+    if [[ -n ${UPDATE_GRUB:-} ]]; then
+        "$UPDATE_GRUB"
+    else
+        grub-mkconfig -o "$CFG"
+    fi
+}
+
+# Copy a config aside, but only when it differs from the newest backup so
+# repeated installer runs do not pile up identical .bak.* files.
+backup_if_changed() {
+    local file=$1 latest
+    latest=$(ls -1t "$file".bak.* 2>/dev/null | head -1 || true)
+    if [[ -n $latest ]] && cmp -s "$file" "$latest"; then
+        return 0
+    fi
+    cp -a "$file" "$file.bak.$STAMP"
+    ln -sfn "$(basename "$file").bak.$STAMP" "$file.bak"
+}
+
 # --- backups ---------------------------------------------------------------
-cp -a "$DEFAULTS" "$DEFAULTS.bak.$STAMP"
-ln -sfn "$(basename "$DEFAULTS").bak.$STAMP" "$DEFAULTS.bak" 2>/dev/null || true
+backup_if_changed "$DEFAULTS"
 if [[ -f $CFG ]]; then
-    cp -a "$CFG" "$CFG.bak.$STAMP"
-    ln -sfn "$(basename "$CFG").bak.$STAMP" "$CFG.bak" 2>/dev/null || true
+    backup_if_changed "$CFG"
 fi
 
 # --- theme files -----------------------------------------------------------
@@ -85,7 +103,7 @@ if [[ -n ${SKIP_UPDATE:-} ]]; then
     exit 0
 fi
 
-if ! "$UPDATE_GRUB"; then
+if ! regen_grub; then
     [[ -f $CFG.bak ]] && cp -a "$CFG.bak" "$CFG"
     die "update-grub failed; grub.cfg restored from backup"
 fi
