@@ -59,6 +59,13 @@ mic-usb    # one-time USB reconnect after a phone reboot
 mic-off    # switch back to the laptop mic
 ```
 
+### Remembering aliases
+
+```bash
+aliases     # live list: aliases + expansions + descriptions, and functions
+cheatsheet  # curated reference in ~/.config/bash/CHEATSHEET.md
+```
+
 ---
 
 ## 🚀 Installation Guide
