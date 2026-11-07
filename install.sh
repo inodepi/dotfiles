@@ -13,7 +13,7 @@ DOTFILES_BASE="$(cd "$DOTFILES_BASE" 2>/dev/null && pwd -P || printf %s "$DOTFIL
 TARGET_DIR="$(cd "$STOW_TARGET" 2>/dev/null && pwd -P || printf %s "$STOW_TARGET")"
 DOTFILES_DIR="$DOTFILES_BASE/stow"
 
-ALL_PACKAGES=(bash fastfetch nvim starship hypr waybar wofi wlogout gtk kitty apps)
+ALL_PACKAGES=(bash fastfetch nvim starship hypr waybar wofi gtk kitty apps)
 # Default for non-interactive runs (override with: PACKAGES="bash nvim" ./install.sh -y)
 DEFAULT_PACKAGES=(bash nvim starship fastfetch)
 
@@ -445,7 +445,6 @@ if [ ${#SELECTED_PACKAGES[@]} -eq 0 ]; then
             "hypr" "Hyprland window manager setup" OFF \
             "waybar" "Waybar status bar" OFF \
             "wofi" "Wofi application launcher" OFF \
-            "wlogout" "Wlogout power menu (lock / logout / reboot)" OFF \
             "gtk" "GTK cursor theme (Bibata Modern Ice)" OFF \
             "kitty" "Kitty terminal configuration" OFF \
             "apps" "Brave, Nemo, Motrix, opencode, kitty, yazi" OFF \
@@ -515,14 +514,13 @@ if [ -n "$PKG_INSTALL" ]; then
             nvim)      install_pkgs nvim ripgrep make unzip git ;;
             starship)  install_pkgs starship ;;
             fastfetch) install_pkgs fastfetch ;;
-            hypr)      install_pkgs hyprland hyprpaper hyprlock hypridle wlogout \
+            hypr)      install_pkgs hyprland hyprpaper hyprlock hypridle wofi \
                               kitty yazi btop brightnessctl pipewire wireplumber mako qt6ct \
                               python3 python3-gobject python3-cairo \
                               xdg-desktop-portal xdg-desktop-portal-gtk xdg-desktop-portal-hyprland
                        install_hyprshot ;;
             waybar)    install_pkgs waybar mako wofi jq libnotify ;;
             wofi)      install_pkgs wofi ;;
-            wlogout)   install_pkgs wlogout ;;
             gtk)       install_pkgs bibata-cursor-theme
                        # Fallback: fetch Bibata Modern Ice from GitHub releases
                        # when this distro doesn't package it (user-level install)
