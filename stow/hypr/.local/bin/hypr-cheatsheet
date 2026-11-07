@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+# Interactive keybind cheatsheet: parses keybinds.conf comments, then appends
+# session-level reference lines that are not tied to a single bind.
+#
+# Usage: hypr-cheatsheet [--print]
+KEYBINDS_FILE="$HOME/.config/hypr/conf/keybinds.conf"
+[ ! -f "$KEYBINDS_FILE" ] && exit 1
+
+PRINT=0
+case "${1:-}" in
+    --print | -p) PRINT=1 ;;
+    -h | --help)
+        echo "Usage: hypr-cheatsheet [--print]"
+        exit 0
+        ;;
+esac
+
+generate() {
+    # Only parse standard 'bind = ...' lines that contain a comment '#'
+    grep -E '^\s*bind\s*=.*#' "$KEYBINDS_FILE" | while IFS= read -r line; do
+        config_part="${line%%#*}"
+        desc_part="${line#*#}"
+        desc_part="$(echo "$desc_part" | xargs)"
+
+        # Skip if comment is empty
+        [ -z "$desc_part" ] && continue
+
+        clean_cfg="${config_part#*=}"
+        clean_cfg="$(echo "$clean_cfg" | xargs)"
+
+        IFS=',' read -r mod key dispatcher args <<< "$clean_cfg"
+        mod="$(echo "$mod" | xargs | sed 's/\$mainMod/SUPER/g')"
+        key="$(echo "$key" | xargs)"
+
+        if [ -n "$mod" ] && [ "$mod" != "-" ]; then
+            shortcut="$mod + $key"
+        else
+            shortcut="$key"
+        fi
+        # Collapse spaces only around '+', so "SUPER SHIFT" stays readable.
+        shortcut="$(echo "$shortcut" | sed 's/[[:space:]]*+[[:space:]]*/ + /g; s/^ *//; s/ *$//')"
+
+        printf "%-30s →  %s\n" "$shortcut" "$desc_part"
+    done
+
+    # Session reference: not single binds, so they cannot come from the comments.
+    printf "%-30s →  %s\n" "SUPER + 1..0" "Switch workspace (add SHIFT to move the active window)"
+    printf "%-30s →  %s\n" "SUPER + F" "Toggle fullscreen"
+    printf "%-30s →  %s\n" "XF86 Vol/Bright" "Volume +/-5%, mute, mic mute, brightness +/-5%"
+    printf "%-30s →  %s\n" "IDLE" "2m dim > 10m lock > 15m screen off > 25m battery / 60m AC suspend"
+    printf "%-30s →  %s\n" "CAFFEINE" "SUPER+C pauses dim/lock/screen-off only; lid + suspend still work"
+}
+
+if ((PRINT)); then
+    generate | sort -u
+else
+    generate | sort -u | wofi --dmenu \
+        --prompt="⌨️ Keybindings Reference" \
+        --width=750 \
+        --height=480 \
+        --cache-file=/dev/null \
+        --conf <(echo -e "allow-images=false\ninsensitive=true")
+fi
