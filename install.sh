@@ -30,6 +30,7 @@ Options:
   -a, --all            Non-interactive: install every package
   -p, --packages LIST  Quoted, space-separated list, e.g. -p "bash nvim waybar"
       --no-pull        Skip 'git pull' when the repo already exists locally
+      --no-grub        Install theme files but do not run update-grub
   -h, --help           Show this help
 
 Environment:

@@ -13,8 +13,8 @@ SRC="$HERE/$NAME"
 if [[ -z ${DEST:-} ]]; then
     [[ ${EUID} -eq 0 ]] || { echo "run with sudo: sudo $0 $NAME" >&2; exit 1; }
     DEST=/usr/share/sddm/themes/$NAME
-    CONF=/etc/sddm.conf.d/theme.conf
 fi
+CONF=${CONF:-/etc/sddm.conf.d/theme.conf}
 
 install -d -m 755 "$DEST"
 cp -a "$SRC/." "$DEST/"
