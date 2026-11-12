@@ -662,6 +662,6 @@ for p in "${SELECTED_PACKAGES[@]}"; do
 done
 
 log "Dotfiles setup complete!"
-log "Want to know π's biggest weakness? Kernels."
+log "Irrational. Just like π. Setup complete."
 echo "    Next: start a new shell (or run 'source ~/.bashrc') to load the bash config."
 echo "    Package commands (update/install/remove/search) now work on this distro."
