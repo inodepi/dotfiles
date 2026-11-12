@@ -4,7 +4,7 @@
 
 set -euo pipefail
 
-REPO_URL="https://github.com/potaterrr/dotfiles.git"
+REPO_URL="https://github.com/inodepi/dotfiles.git"
 DOTFILES_BASE="${DOTFILES_BASE:-$HOME/git-projects/dotfiles}"
 STOW_TARGET="${STOW_TARGET:-$HOME}"
 # Canonicalize to physical paths so symlinked targets can't alias repo files.
@@ -635,15 +635,16 @@ done
 # ---------------------------------------------------------------------------
 # 8. Desktop themes — SDDM greeter + GRUB boot menu (Tokyo Night)
 #    Theme files are copied to system paths and the active config is
-#    switched. GRUB runs update-grub with backups; pass --no-grub to skip
-#    the bootloader step (the theme scripts keep their own rollback).
+#    switched. The GRUB step also makes the menu visible (timeout +
+#    menu style) and runs update-grub with backups; pass --no-grub to
+#    skip the bootloader step (the theme scripts keep their own rollback).
 # ---------------------------------------------------------------------------
 for p in "${SELECTED_PACKAGES[@]}"; do
     [ "$p" = "themes" ] || continue
 
     if command -v sddm >/dev/null 2>&1; then
-        log "Installing SDDM login theme (qylock-tokyonight)..."
-        $SUDO "$DOTFILES_BASE/sddm-theme/install.sh" qylock-tokyonight \
+        log "Installing SDDM login theme (inodepi)..."
+        $SUDO "$DOTFILES_BASE/sddm-theme/install.sh" inodepi \
             || warn "SDDM theme failed; retry: sudo $DOTFILES_BASE/sddm-theme/install.sh"
     else
         warn "sddm not installed; skipping the login theme."
@@ -651,7 +652,7 @@ for p in "${SELECTED_PACKAGES[@]}"; do
 
     if [ "$NO_GRUB" -eq 1 ]; then
         warn "GRUB theme skipped (--no-grub). Apply later: sudo $DOTFILES_BASE/grub-theme/install.sh"
-    elif [ -f /etc/default/grub ] && [ -d /boot/grub ]; then
+    elif [ -f /etc/default/grub ] && { [ -d /boot/grub ] || [ -d /boot/grub2 ]; }; then
         log "Installing GRUB boot theme (runs update-grub with backups)..."
         $SUDO "$DOTFILES_BASE/grub-theme/install.sh" \
             || warn "GRUB theme failed; retry: sudo $DOTFILES_BASE/grub-theme/install.sh"

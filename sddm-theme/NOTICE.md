@@ -1,6 +1,6 @@
 # Attribution
 
-`potaterrr` is a modified copy of the `pixel-coffee` SDDM theme from
+`inodepi` is a modified copy of the `pixel-coffee` SDDM theme from
 [Darkkal44/qylock](https://github.com/Darkkal44/qylock), licensed GPL-3.0.
 
 Changes from upstream:

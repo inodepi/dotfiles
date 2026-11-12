@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# Install the potaterrr SDDM theme system-wide.
+# Install the inodepi SDDM theme system-wide.
 # Usage: sudo ./sddm-theme/install.sh [theme-name]
 set -euo pipefail
 
-NAME=${1:-potaterrr}
+NAME=${1:-inodepi}
 HERE="$(cd "$(dirname "$0")" && pwd)"
 SRC="$HERE/$NAME"
 

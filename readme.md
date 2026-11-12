@@ -14,7 +14,7 @@
 
 ## 📸 Overview
 
-A clean, lightweight, and reproducible dotfiles setup designed for seamless deployment across six Linux distro families (Debian/Ubuntu, Fedora, Arch, openSUSE, Alpine, Void) on both desktop workstations and servers — installed end-to-end with a single command: `curl -fsSL https://potaterrr.github.io/install | sh`.
+A clean, lightweight, and reproducible dotfiles setup designed for seamless deployment across six Linux distro families (Debian/Ubuntu, Fedora, Arch, openSUSE, Alpine, Void) on both desktop workstations and servers — installed end-to-end with a single command: `curl -fsSL https://inodepi.github.io/install | sh`.
 
 **Tested on:** Lenovo ThinkPad E14 Gen 1 · Intel Core i7-10510U · 16 GB RAM · Debian 13 (trixie)
 
@@ -75,13 +75,13 @@ cheatsheet  # curated reference in ~/.config/bash/CHEATSHEET.md
 Bootstraps everything (clone + deps + stow) on any supported distro:
 
 ```bash
-curl -fsSL https://potaterrr.github.io/install | sh
+curl -fsSL https://inodepi.github.io/install | sh
 ```
 
 Prefer to review first? The classic way works too:
 
 ```bash
-git clone https://github.com/potaterrr/dotfiles.git ~/git-projects/dotfiles && cd ~/git-projects/dotfiles && chmod +x install.sh && ./install.sh
+git clone https://github.com/inodepi/dotfiles.git ~/git-projects/dotfiles && cd ~/git-projects/dotfiles && chmod +x install.sh && ./install.sh
 ```
 
 ### Supported Distributions
@@ -181,7 +181,7 @@ layout, or `wlogout-rates --refresh` to bypass the cache.
 
 ### GRUB boot theme (Qylock, Tokyo Night)
 
-`grub-theme/qylock-tokyonight/` is a GRUB 2 gfxmenu theme using the same Tokyo
+`grub-theme/inodepi/` is a GRUB 2 gfxmenu theme using the same Tokyo
 Night palette as the rest of the desktop: `#1a1b26` base, `#7aa2f7` selection,
 JetBrainsMono NF fonts generated with `grub-mkfont`, and the Hyprland wallpaper
 darkened 55% as the menu background (1920x1080, matching `GRUB_GFXMODE`).
@@ -196,13 +196,19 @@ Selecting the `themes` package in `./install.sh` copies the theme and runs
 to the installer to copy the theme files without touching the bootloader
 configuration.
 
+The installer also guarantees a visible menu: it sets `GRUB_TIMEOUT` (5s by
+default, override with `MENU_TIMEOUT=10 sudo ./grub-theme/install.sh`) and
+`GRUB_TIMEOUT_STYLE=menu`, and drops any `GRUB_HIDDEN_TIMEOUT*` keys. GRUB's
+directory is detected, so `/boot/grub2` (Fedora, openSUSE) works as well as
+`/boot/grub` (Debian, Ubuntu, Arch).
+
 The installer is deliberately narrow:
 
-- backs up `/etc/default/grub` and `/boot/grub/grub.cfg` first
-- edits only `GRUB_THEME` and `GRUB_BACKGROUND`
+- backs up `/etc/default/grub` and the generated `grub.cfg` first
+- edits `GRUB_THEME`, `GRUB_BACKGROUND`, `GRUB_TIMEOUT`, and `GRUB_TIMEOUT_STYLE`
 - never runs `grub-install` (no EFI/bootloader writes)
-- restores `grub.cfg` automatically if `update-grub` fails
-- validates the result with `grub-script-check`
+- restores `grub.cfg` automatically if regeneration fails
+- validates the result with `grub-script-check` when available
 
 A theme that fails to load makes GRUB fall back to its text menu; it does not
 prevent booting. The previous `Elegant-forest-window-left-dark` theme stays
@@ -211,7 +217,7 @@ restore above.
 
 ### SDDM login theme (Qylock, Tokyo Night)
 
-`sddm-theme/qylock-tokyonight/` is a copy of the
+`sddm-theme/inodepi/` is a copy of the
 [Qylock](https://github.com/Darkkal44/qylock) `pixel-coffee` greeter layout,
 restyled to Tokyo Night: `#1a1b26` base, `#7aa2f7` accent, JetBrainsMono Nerd
 Font instead of PixelifySans, rounded password field and buttons. The background
@@ -231,11 +237,11 @@ The script copies the theme, fixes permissions, and points
 appears on the next logout. Preview without logging out:
 
 ```sh
-cd sddm-theme/qylock-tokyonight
+cd sddm-theme/inodepi
 sddm-greeter-qt6 --test-mode --theme .
 ```
 
-To change the background, replace `sddm-theme/qylock-tokyonight/background.jpg`
+To change the background, replace `sddm-theme/inodepi/background.jpg`
 and re-run the installer. Pass a theme name as the first argument to install a
 different theme directory. See `sddm-theme/NOTICE.md` for attribution; the
 upstream QML is GPL-3.0.
