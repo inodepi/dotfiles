@@ -12,8 +12,8 @@
 
 ---
 
-> **Want to know π's biggest weakness? Kernels.**
-> This repo has a few of them — press `y` at the prompt and find out.
+> **Irrational. Just like π.**
+> Stow it, run it, and get back to the work.
 
 ---
 
