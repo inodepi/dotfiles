@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🥔 Potaterrr's Dotfiles
+# inodepi's dotfiles
 
-**A modular, cross-distribution dotfiles configuration managed with GNU Stow & an interactive installer.**
+**Automation-grade shell setup — stow it, run it, move on.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Linux](https://img.shields.io/badge/Platform-Linux-blue.svg)](https://www.linux.org)
@@ -12,15 +12,32 @@
 
 ---
 
-## 📸 Overview
-
-A clean, lightweight, and reproducible dotfiles setup designed for seamless deployment across six Linux distro families (Debian/Ubuntu, Fedora, Arch, openSUSE, Alpine, Void) on both desktop workstations and servers — installed end-to-end with a single command: `curl -fsSL https://inodepi.github.io/install | sh`.
-
-**Tested on:** Lenovo ThinkPad E14 Gen 1 · Intel Core i7-10510U · 16 GB RAM · Debian 13 (trixie)
+> **Want to know π's biggest weakness? Kernels.**
+> This repo has a few of them — press `y` at the prompt and find out.
 
 ---
 
-## 📦 Included Configurations
+## ⚡ One-liner install
+
+Bootstraps everything (clone + deps + stow) on any supported distro:
+
+```bash
+curl -fsSL https://inodepi.github.io/install | sh
+```
+
+Prefer to review first? The classic way works too:
+
+```bash
+git clone https://github.com/inodepi/dotfiles.git ~/git-projects/dotfiles && cd ~/git-projects/dotfiles && chmod +x install.sh && ./install.sh
+```
+
+The shell setup behind [inodepi](https://inodepi.github.io/) — the same config that
+runs the automation work. Built for speed: stow packages, honest prompts, and a
+prompt that gets out of the way.
+
+---
+
+## 📦 Included configurations
 
 Configurations are isolated into individual modular packages under the `stow/` directory to prevent system clutter and allow selective deployment:
 
@@ -29,7 +46,7 @@ Configurations are isolated into individual modular packages under the `stow/` d
 | **`bash`** | Custom Bash shell configurations, prompts, and git aliases |
 | **`nvim`** | Neovim setup powered by LazyVim |
 | **`starship`** | Minimalist cross-shell prompt preset |
-| **`fastfetch`** | Catppuccin-themed system info (boxed layout, potato logo, kitty graphics + ASCII fallback) |
+| **`fastfetch`** | Catppuccin-themed system info (boxed layout, custom badge, kitty graphics + ASCII fallback) |
 | **`hypr`** | Hyprland dynamic tiling window manager setup (incl. hypridle, hyprlock, cursor env) |
 | **`waybar`** | Custom Waybar status bar layout with caffeine mode (󰾪/󰅶 idle inhibitor) |
 | **`systemd`** | `caffeine.service` user unit — auto-installed with the `waybar` package |
@@ -68,7 +85,7 @@ cheatsheet  # curated reference in ~/.config/bash/CHEATSHEET.md
 
 ---
 
-## 🚀 Installation Guide
+## 🚀 Installation guide
 
 ### Quick One-Liner Install
 
@@ -84,7 +101,7 @@ Prefer to review first? The classic way works too:
 git clone https://github.com/inodepi/dotfiles.git ~/git-projects/dotfiles && cd ~/git-projects/dotfiles && chmod +x install.sh && ./install.sh
 ```
 
-### Supported Distributions
+### Supported distributions
 
 The installer auto-detects and uses **apt** (Debian/Ubuntu), **dnf** (Fedora),
 **pacman** (Arch), **zypper** (openSUSE), **apk** (Alpine), or **xbps** (Void).
@@ -179,7 +196,7 @@ Append another ISO code under `fiat`, or add `"SYMBOL": "coingecko-id"` under
 automatically. Run `wlogout-rates --print --refresh` to preview the generated
 layout, or `wlogout-rates --refresh` to bypass the cache.
 
-### GRUB boot theme (Qylock, Tokyo Night)
+### GRUB boot theme (Tokyo Night)
 
 `grub-theme/inodepi/` is a GRUB 2 gfxmenu theme using the same Tokyo
 Night palette as the rest of the desktop: `#1a1b26` base, `#7aa2f7` selection,
@@ -215,7 +232,7 @@ prevent booting. The previous `Elegant-forest-window-left-dark` theme stays
 installed under `/usr/share/grub/themes`, so reverting is just the backup
 restore above.
 
-### SDDM login theme (Qylock, Tokyo Night)
+### SDDM login theme (Tokyo Night)
 
 `sddm-theme/inodepi/` is a copy of the
 [Qylock](https://github.com/Darkkal44/qylock) `pixel-coffee` greeter layout,
@@ -249,16 +266,16 @@ upstream QML is GPL-3.0.
 ### Fastfetch theming
 
 The default `config.jsonc` is the [Catppuccin fastfetch](https://github.com/Nukecraft5419/fastfetch)
-boxed layout (Hardware/Software sections) with a custom potato badge
-(`logo/catppuccin_logo.png`, rendered via the kitty graphics protocol) and a
-cute ASCII potato fallback (`potato.ans`, see `config-ascii.jsonc`). Piping
+boxed layout (Hardware/Software sections) with a custom badge
+(`catppuccin_logo.png`, rendered via the kitty graphics protocol) and a
+one-file ASCII fallback (`potato.ans`, see `config-ascii.jsonc`). Piping
 `fastfetch` (e.g. into `less`) automatically drops to the built-in fallback.
 
 All colors are written as raw SGR parameters (`38;2;R;G;B`) instead of `#hex`:
 mainline fastfetch accepts both, but some builds only parse SGR — so the theme
 renders identically on every distro and build.
 
-Other presets: `config-ascii.jsonc` (potato ASCII), `config-compact.jsonc`,
+Other presets: `config-ascii.jsonc`, `config-compact.jsonc`,
 `config-pokemon.jsonc`, `config-v2.jsonc`.
 
 Non-interactive options (great for fresh bare-metal installs):

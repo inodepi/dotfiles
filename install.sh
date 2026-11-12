@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Potaterrr dotfiles installer — works on Debian/Ubuntu, Fedora, Arch,
+# inodepi dotfiles installer — works on Debian/Ubuntu, Fedora, Arch,
 # openSUSE, Alpine, and Void. Interactive or fully non-interactive.
 
 set -euo pipefail
@@ -440,7 +440,7 @@ install_hyprshot() {
 # ---------------------------------------------------------------------------
 if [ ${#SELECTED_PACKAGES[@]} -eq 0 ]; then
     if command -v whiptail >/dev/null 2>&1; then
-        CHOICES=$(whiptail --title "Potaterrr Dotfiles Installer" \
+        CHOICES=$(whiptail --title "Inodepi Dotfiles Installer" \
             --checklist "Use [Space] to select/deselect packages to install & stow:" 22 78 14 \
             "bash" "Bash shell configurations & aliases" ON \
             "nvim" "Neovim (LazyVim setup)" ON \
@@ -662,5 +662,6 @@ for p in "${SELECTED_PACKAGES[@]}"; do
 done
 
 log "Dotfiles setup complete!"
+log "Want to know π's biggest weakness? Kernels."
 echo "    Next: start a new shell (or run 'source ~/.bashrc') to load the bash config."
 echo "    Package commands (update/install/remove/search) now work on this distro."
