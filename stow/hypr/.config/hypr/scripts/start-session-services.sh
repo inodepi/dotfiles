@@ -16,8 +16,8 @@ if command -v dbus-update-activation-environment >/dev/null 2>&1; then
     dbus-update-activation-environment --systemd "${ENV_VARS[@]}" 2>/dev/null || true
 fi
 
-# start (not restart) is idempotent: no-op if already healthy, retries if failed.
-systemctl --user start waybar.service 2>/dev/null || true
+# restart (not start): the unit must pick up the freshly imported HYPRLAND_INSTANCE_SIGNATURE
+systemctl --user restart waybar.service 2>/dev/null || true
 
 # If waybar.service cannot run for some reason, fall back to a direct launch so
 # the session still gets a bar.
